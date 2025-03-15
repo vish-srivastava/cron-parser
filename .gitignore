@@ -1,0 +1,58 @@
+# Ignore Maven & Gradle build directories
+target/
+build/
+
+# Ignore IDE-specific files
+.idea/
+*.iml
+.vscode/
+*.sublime-workspace
+*.swp
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore compiled class files
+*.class
+
+# Ignore logs and temp files
+logs/
+*.log
+hs_err_pid*
+!src/main/resources/static/logs/
+
+# Ignore environment and secrets
+.env
+*.properties
+*.yml
+*.yaml
+*.json
+secrets/
+application-*.yml
+application-*.properties
+
+# Ignore package managers (NodeJS, etc.)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ignore JARs & WARs
+*.jar
+*.war
+
+# Ignore IntelliJ IDEA workspace files
+*.ipr
+*.iws
+
+# Ignore Eclipse project files
+.project
+.classpath
+.settings/
+
+# Ignore Lombok-generated files
+.lombok/
+
+# Ignore Spring Boot devtools
+spring-boot-devtools.jar
+
