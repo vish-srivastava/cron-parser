@@ -142,9 +142,10 @@ public class CronParserApplicationTests {
 
         assertEquals("2001 2006 2011 2016 2021", cron.getYearsAsString());
     }
+
     // Allow day names and month names (e.g. Dec, Jan, Mon, Tue, etc.)
     @Test
-    public void  testValidStandardCronExpressionWithDayAndMonthNames(){
+    public void testValidStandardCronExpressionWithDayAndMonthNames() {
         String cronExpression = "*/15 0 1,15 JAN-MAR 1-5 */5 /usr/bin/find";
         CronExpressionParser parser = CronParser.getParser(cronExpression);
         CronExpression cron = parser.parse(cronExpression);
@@ -153,12 +154,12 @@ public class CronParserApplicationTests {
         assertEquals("0", cron.getHoursAsString());
         assertEquals("1 15", cron.getDaysOfMonthAsString());
         assertEquals("1 2 3 4 5", cron.getDaysOfWeekAsString());
-        assertEquals("1 2 3",cron.getMonthsAsString());
+        assertEquals("1 2 3", cron.getMonthsAsString());
         assertEquals("/usr/bin/find", cron.getCommand());
         assertEquals("0 15 30 45", cron.getMinutesAsString());
 
         assertEquals("2001 2006 2011 2016 2021", cron.getYearsAsString());
-
+        assertTrue(true);
 
     }
 }
