@@ -36,7 +36,7 @@ public class CronParserApplicationTests {
         assertEquals("/usr/bin/every_minute", cron.getCommand());
     }
 
-    // ✅ Test extended cron parser (Throws NotImplementedException for now)
+    // ✅ Test extended cron parser (Throws UnsupportedOperationException for now)
     @Test
     public void testExtendedCronExpression_NotImplemented() {
         String cronExpression = "@yearly /usr/bin/yearly_task";
@@ -44,7 +44,7 @@ public class CronParserApplicationTests {
         assertTrue(exception.getMessage().contains("Unsupported cron format"));
     }
 
-    // ❌ Negative test cases for ambiguous expressions
+    // Negative test cases for ambiguous expressions
     @Test
     public void testAmbiguousCronExpression_ShouldThrowError() {
         String cronExpression = "0 12 ? * MON-FRI /usr/bin/script";
@@ -109,5 +109,56 @@ public class CronParserApplicationTests {
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> parser.parse(cronExpression));
         assertTrue(exception.getMessage().contains("Invalid number format in cron expression"));
+    }
+
+    @Test
+    public void testValidStandardCronExpressionWithYearRange() {
+        String cronExpression = "*/15 0 1,15 * 1-5 2001-2010 /usr/bin/find";
+        CronExpressionParser parser = CronParser.getParser(cronExpression);
+        CronExpression cron = parser.parse(cronExpression);
+
+        assertEquals("0 15 30 45", cron.getMinutesAsString());
+        assertEquals("0", cron.getHoursAsString());
+        assertEquals("1 15", cron.getDaysOfMonthAsString());
+        assertEquals("1 2 3 4 5", cron.getDaysOfWeekAsString());
+        assertEquals("/usr/bin/find", cron.getCommand());
+        assertEquals("0 15 30 45", cron.getMinutesAsString());
+
+        assertEquals("2001 2002 2003 2004 2005 2006 2007 2008 2009 2010", cron.getYearsAsString());
+    }
+
+    @Test
+    public void testValidStandardCronExpressionWithYearStep() {
+        String cronExpression = "*/15 0 1,15 * 1-5 */5 /usr/bin/find";
+        CronExpressionParser parser = CronParser.getParser(cronExpression);
+        CronExpression cron = parser.parse(cronExpression);
+
+        assertEquals("0 15 30 45", cron.getMinutesAsString());
+        assertEquals("0", cron.getHoursAsString());
+        assertEquals("1 15", cron.getDaysOfMonthAsString());
+        assertEquals("1 2 3 4 5", cron.getDaysOfWeekAsString());
+        assertEquals("/usr/bin/find", cron.getCommand());
+        assertEquals("0 15 30 45", cron.getMinutesAsString());
+
+        assertEquals("2001 2006 2011 2016 2021", cron.getYearsAsString());
+    }
+    // Allow day names and month names (e.g. Dec, Jan, Mon, Tue, etc.)
+    @Test
+    public void  testValidStandardCronExpressionWithDayAndMonthNames(){
+        String cronExpression = "*/15 0 1,15 JAN-MAR 1-5 */5 /usr/bin/find";
+        CronExpressionParser parser = CronParser.getParser(cronExpression);
+        CronExpression cron = parser.parse(cronExpression);
+
+        assertEquals("0 15 30 45", cron.getMinutesAsString());
+        assertEquals("0", cron.getHoursAsString());
+        assertEquals("1 15", cron.getDaysOfMonthAsString());
+        assertEquals("1 2 3 4 5", cron.getDaysOfWeekAsString());
+        assertEquals("1 2 3",cron.getMonthsAsString());
+        assertEquals("/usr/bin/find", cron.getCommand());
+        assertEquals("0 15 30 45", cron.getMinutesAsString());
+
+        assertEquals("2001 2006 2011 2016 2021", cron.getYearsAsString());
+
+
     }
 }

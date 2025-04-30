@@ -10,13 +10,14 @@ import java.util.function.Function;
 /**
  * Generic Cron Field Parser supporting:
  * - Integer-based ranges (0-59, 1-31, etc.)
- * - String mappings (MON-THU, JAN-DEC, etc.)
+ * - String mappings for extension (MON-THU, JAN-DEC, etc.)
  */
+@SuppressWarnings("ALL")
 public class CronFieldParser<T extends Comparable<T>> {
 
     private final T minValue; // to validate field's min value
     private final T maxValue; // to validate field's max value
-    private final Function<String, T> parser; // to parse the generic type
+    private final Function<String, T> parser; // to parse the generic type to concrete object : Integer, String etc
     private final Map<String, T> stringMappings; // integer to string mapping for month, day of week
 
     /**
@@ -58,23 +59,23 @@ public class CronFieldParser<T extends Comparable<T>> {
     }
 
     private void parsePart(String part, List<T> result) {
-        if (part.contains("/")) {
+        if (part.contains("/")) { // step
             handleStepValues(part, result);
-        } else if (part.contains("-")) {
+        } else if (part.contains("-")) { // range
             handleRangeValues(part, result);
-        } else {
+        } else { // single value
             handleSingleValue(part, result);
         }
     }
 
-    private void handleStepValues(String part, List<T> result) {
+    private void handleStepValues(String part, List<T> result) { // */5
         String[] stepParts = part.split("/");
         if (stepParts.length != 2) {
             throw new IllegalArgumentException("Invalid step syntax: " + part);
         }
 
-        T start = stepParts[0].equals("*") ? minValue : parseValue(stepParts[0]);
-        T step = parseValue(stepParts[1]);
+        T start = stepParts[0].equals("*") ? minValue : parseValue(stepParts[0]); // 2001
+        T step =  parser.apply(stepParts[1]);// 5
 
         if (compare(start, minValue) < 0 || compare(start, maxValue) > 0) {
             throw new IllegalArgumentException("Step start value out of bounds: " + start + ". Allowed range: " + minValue + " - " + maxValue);
@@ -92,10 +93,10 @@ public class CronFieldParser<T extends Comparable<T>> {
             throw new IllegalArgumentException("Invalid range syntax: " + part);
         }
 
-        T start = parseValue(rangeParts[0]);
-        T end = parseValue(rangeParts[1]);
+        T start = parseValue(rangeParts[0]); // also validated self value within range
+        T end = parseValue(rangeParts[1]); //
 
-        if (compare(start, end) > 0) {
+        if (compare(start, end) > 0) { // valid range
             throw new IllegalArgumentException("Invalid range: Start value " + start + " cannot be greater than end value " + end);
         }
 

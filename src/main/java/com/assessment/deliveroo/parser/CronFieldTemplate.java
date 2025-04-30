@@ -3,6 +3,7 @@ package com.assessment.deliveroo.parser;
 import java.util.HashMap;
 import java.util.Map;
 
+// static template/ configuration
 public class CronFieldTemplate {
     private static final Map<String, Integer[]> INTEGER_RANGES = new HashMap<>();
     private static final Map<String, Map<String, Integer>> STRING_MAPPINGS = new HashMap<>();
@@ -13,7 +14,7 @@ public class CronFieldTemplate {
         INTEGER_RANGES.put("hour", new Integer[]{0, 23});
         INTEGER_RANGES.put("dayOfMonth", new Integer[]{1, 31});
         INTEGER_RANGES.put("month", new Integer[]{1, 12});
-        INTEGER_RANGES.put("year", new Integer[]{1970, 2099});
+        INTEGER_RANGES.put("year", new Integer[]{2001, 2025});
         INTEGER_RANGES.put("dayOfWeek", new Integer[]{0, 6}); // Sunday = 0, Saturday = 6
 
         // String-based mappings

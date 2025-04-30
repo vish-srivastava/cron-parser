@@ -24,7 +24,7 @@ public class StandardCronExpressionParser implements CronExpressionParser<Intege
         String[] parts = cronString.trim().split("\\s+");
 
         if (parts.length < 6 || parts.length > 7) {
-            throw new IllegalArgumentException("Invalid cron format. Expected 6 or 7 fields (minute, hour, dayOfMonth, month, dayOfWeek, [year], command).");
+            throw new IllegalArgumentException("Invalid cron format. Expected 6 fields (minute, hour, dayOfMonth, month, dayOfWeek, command).");
         }
 
         List<Integer> minutes = minuteParser.parseField(parts[0]);

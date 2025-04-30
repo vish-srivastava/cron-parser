@@ -9,8 +9,8 @@ public class CronParser {
      */
     public static CronExpressionParser getParser(String cronString) {
         int fieldCount = cronString.split("\\s+").length;
-
-        if (fieldCount == 6) {
+        // can implement a factory/strategy pattern to return type of Cron Parser
+        if (fieldCount == 6 || fieldCount == 7) {
             return new StandardCronExpressionParser(); // 5 fields + command
         } else {
             throw new UnsupportedOperationException("Unsupported cron format. Expected 6 fields.");

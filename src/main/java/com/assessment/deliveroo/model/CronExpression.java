@@ -47,7 +47,7 @@ public class CronExpression<T> {
         System.out.print(output);
     }
 
-
+    // below functions are just to format and print values
     private String formatList(List<T> values) {
         return values.stream().map(String::valueOf).collect(Collectors.joining(" "));
     }
@@ -74,5 +74,9 @@ public class CronExpression<T> {
 
     public String getCommand() {
         return command;
+    }
+
+    public String getYearsAsString() {
+        return formatList(years);
     }
 }
